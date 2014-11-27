@@ -131,7 +131,7 @@ import ships.Ship;
 
         private function onProgress(ratio:Number):void {
 
-            dispatchEventWith("gameAssetsLoadingProgress", false, ratio);
+            dispatchEventWith("gameAssetsLoadingProgress", false, {gameID: _gameID, ratio: ratio});
 
             if(ratio == 1){
 
@@ -271,10 +271,17 @@ import ships.Ship;
 
         }
 
+		private function onTurnStart(gameId:String):void {
+
+			dispatchEventWith("turnStart", false, gameId);
+
+		}
+
         private function createTurns():void {
 			
-			_turns = new Turns();
+			_turns = new Turns(gameID);
             _turns.addEventListener("sendData", onSendData);
+			_turns.addEventListener("turnStart", onTurnStart);
 
 			//initial turn, the selection and positioning of the ships
             _turns.createState(
